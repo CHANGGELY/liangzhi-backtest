@@ -4,6 +4,8 @@ import sys
 
 try:
     # 不带时间范围，默认取最近的
+    # 注意：该地址为 localhost 回环地址的内网健康检查，无跨网络明文传输；
+    # 本地服务未启用 TLS，改为 https 会连接失败，故保留 http。
     url = "http://localhost:8001/api/kline/range?limit=5"
     with urllib.request.urlopen(url) as response:
         body = response.read().decode()
