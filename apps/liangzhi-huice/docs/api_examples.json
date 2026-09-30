@@ -10,7 +10,7 @@
     },
     "get_kline": {
       "description": "获取K线数据",
-      "command": "curl -X GET 'http://localhost:8000/api/kline/data?symbol=BTCUSDT&timeframe=1h' -H 'Authorization: Bearer YOUR_TOKEN'"
+      "command": "curl -X GET 'http://localhost:8000/api/kline/data?symbol=BTCUSDT&timeframe=1h' -H 'Authorization: Bearer ${TOKEN}'"
     }
   },
   "python_examples": {

@@ -134,7 +134,7 @@ curl -X POST http://localhost:8000/api/auth/register   -H "Content-Type: applica
 curl -X POST http://localhost:8000/api/auth/login   -H "Content-Type: application/x-www-form-urlencoded"   -d "username=testuser&password=password123"
 
 # 获取K线数据
-curl -X GET "http://localhost:8000/api/kline/data?symbol=BTCUSDT&timeframe=1h"   -H "Authorization: Bearer YOUR_TOKEN"
+curl -X GET "http://localhost:8000/api/kline/data?symbol=BTCUSDT&timeframe=1h"   -H "Authorization: Bearer ${TOKEN}"
 ```
 
 ### Python示例
