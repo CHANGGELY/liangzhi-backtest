@@ -1,5 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveWithinRoot } from '../../config/pathGuard.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // 从 api/config 到 apps/liangzhi-huice 需要向上两层
@@ -10,7 +11,8 @@ const defaultH5Path = path.resolve(backtestDataDir, 'ethusdt_1m_2019-11-01_to_20
 
 export const DEFAULT_CONFIG = {
   h5: {
-    filePath: process.env.H5_FILE_PATH || defaultH5Path,
+    // 环境变量提供的 H5 路径需校验在仓库根目录内，防止路径穿越
+    filePath: process.env.H5_FILE_PATH ? resolveWithinRoot(process.env.H5_FILE_PATH, repoRoot) : defaultH5Path,
   },
   backtest: {
     initialEquity: 10000,

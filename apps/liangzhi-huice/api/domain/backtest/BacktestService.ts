@@ -1,6 +1,7 @@
 import { spawn, ChildProcess } from 'child_process';
 import path from 'path';
 import fs from 'fs/promises';
+import { resolveWithinRoot } from '../../../config/pathGuard.js';
 // import { v4 as uuidv4 } from 'uuid';
 // 临时使用简单的ID生成器
 function uuidv4(): string {
@@ -145,15 +146,20 @@ export class BacktestService {
   private async createTempConfig(backtestId: string, config: BacktestConfig): Promise<string> {
     const tempDir = path.join(process.cwd(), 'temp', 'backtest');
     await fs.mkdir(tempDir, { recursive: true });
-    
+
     const configPath = path.join(tempDir, `config_${backtestId}.json`);
-    
+
+    // 环境变量提供的 H5 路径需校验在仓库根目录内，防止路径穿越
+    const dataFilePath = process.env.H5_FILE_PATH
+      ? resolveWithinRoot(process.env.H5_FILE_PATH, path.join(process.cwd(), '..', '..'))
+      : path.join(process.cwd(), 'api', 'ETHUSDT_1m_2019-11-27_to_2025-08-09.h5');
+
     const pythonConfig = {
       BACKTEST_CONFIG: {
         initial_balance: config.initialBalance,
         start_date: config.startDate,
         end_date: config.endDate,
-        data_file_path: process.env.H5_FILE_PATH || path.join(process.cwd(), 'api', 'ETHUSDT_1m_2019-11-27_to_2025-08-09.h5')
+        data_file_path: dataFilePath
       },
       STRATEGY_CONFIG: {
         leverage: config.leverage,
