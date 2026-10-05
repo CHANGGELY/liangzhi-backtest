@@ -144,6 +144,10 @@ export class BacktestService {
   }
 
   private async createTempConfig(backtestId: string, config: BacktestConfig): Promise<string> {
+    // 安全加固：backtestId 来自外部输入，禁止路径分隔符与相对段，防止路径穿越（Sourcery High 89）
+    if (!backtestId || /[\/]/.test(backtestId) || backtestId.includes('..')) {
+      throw new Error(`非法 backtestId（含路径分隔符或相对段）: ${backtestId}`);
+    }
     const tempDir = path.join(process.cwd(), 'temp', 'backtest');
     await fs.mkdir(tempDir, { recursive: true });
 
